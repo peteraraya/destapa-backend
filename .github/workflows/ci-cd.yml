@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  # ==========================================
+  # JOB 1: Continuous Integration (Pruebas y Build)
+  # ==========================================
+  integration:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🔍 Linter (Revisión de código limpio)
+        run: npm run lint
+
+      - name: 🧪 Pruebas Unitarias
+        run: npm run test
+
+      - name: 🧪 Pruebas End-to-End (E2E)
+        run: npm run test:e2e
+
+      - name: 🏗️ Compilar (Build)
+        run: npm run build
+
+  # ==========================================
+  # JOB 2: Continuous Deployment (Despliegue)
+  # ==========================================
+  deployment:
+    name: Deploy to Production
+    needs: integration # Depende de que 'integration' pase en verde
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Solo despliega cuando se hace push/merge a 'main'
+    
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Desplegar aplicación
+        # Aquí se reemplaza con la lógica de despliegue según el proveedor en uso.
+        # Ej: AWS, Vercel, Railway, Render, etc.
+        # Para Railway CLI: railway up --detach
+        # Para SSH a VPS: usar appleboy/ssh-action
+        run: |
+          echo "Iniciando despliegue continuo..."
+          echo "Simulación de despliegue a servidor exitosa."
+          # Agrega aquí tus comandos de despliegue
