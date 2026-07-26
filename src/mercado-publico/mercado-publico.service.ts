@@ -36,10 +36,16 @@ export class MercadoPublicoService {
       this.logger.log(
         `Consultando Mercado Público para comuna código: ${codigoComuna}`,
       );
-      // El endpoint exacto de comunas depende de la documentación privada, pero asumiendo una búsqueda de hoy:
-      // Se utiliza fecha de hoy para no traer histórico masivo y se busca por organismo asociado a la comuna,
-      // o bien si la API permite buscar por codigoComuna directamente, como indicaba el requerimiento:
-      const url = `${this.baseUrl}/licitaciones.json?ticket=${ticket}&CodigoComuna=${codigoComuna}`;
+      // Para la API de Mercado Público, "CodigoComuna" no es un parámetro válido.
+      // Usaremos la búsqueda por "fecha" del día actual (ddmmyyyy) para obtener licitaciones recientes
+      // a modo de demostración.
+      const hoy = new Date();
+      const d = String(hoy.getDate()).padStart(2, '0');
+      const m = String(hoy.getMonth() + 1).padStart(2, '0');
+      const y = hoy.getFullYear();
+      const fechaHoy = `${d}${m}${y}`;
+
+      const url = `${this.baseUrl}/licitaciones.json?ticket=${ticket}&fecha=${fechaHoy}`;
 
       const { data } = await firstValueFrom<{
         data: {
@@ -48,7 +54,10 @@ export class MercadoPublicoService {
       }>(
         this.httpService.get(url).pipe(
           catchError((error: Error) => {
-            this.logger.error('Error al consultar Mercado Público', error);
+            this.logger.error(
+              'Error al consultar Mercado Público',
+              error.message || String(error),
+            );
             throw error;
           }),
         ),

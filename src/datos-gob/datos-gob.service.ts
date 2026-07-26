@@ -18,6 +18,7 @@ export class DatosGobService {
     'la florida': '13108',
     maipu: '13119',
     maipú: '13119',
+    quillota: '05501',
   };
 
   constructor(private readonly httpService: HttpService) {}

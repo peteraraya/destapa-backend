@@ -49,7 +49,7 @@ describe('MercadoPublicoService', () => {
     expect(result).toHaveLength(1);
     expect(result[0].CodigoExterno).toBe('REAL-LE23');
     expect(httpServiceMock.get).toHaveBeenCalledWith(
-      expect.stringContaining('ticket=TEST_TICKET&CodigoComuna=13101'),
+      expect.stringContaining('ticket=TEST_TICKET&fecha='),
     );
   });
 

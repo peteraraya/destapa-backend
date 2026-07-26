@@ -18,14 +18,25 @@ export class SismosService {
       this.logger.log('Obteniendo últimos sismos de boostr.cl');
       const { data } = await firstValueFrom<{
         data: {
-          data?: Array<{
-            magnitude?: string | number;
-            Magnitud?: string | number;
-            location?: string;
-            RefGeografica?: string;
-            date?: string;
-            Fecha?: string;
-          }>;
+          data?:
+            | Array<{
+                magnitude?: string | number;
+                Magnitud?: string | number;
+                location?: string;
+                RefGeografica?: string;
+                date?: string;
+                Fecha?: string;
+                place?: string;
+              }>
+            | {
+                magnitude?: string | number;
+                Magnitud?: string | number;
+                location?: string;
+                RefGeografica?: string;
+                date?: string;
+                Fecha?: string;
+                place?: string;
+              };
         };
       }>(
         this.httpService.get('https://api.boostr.cl/earthquakes.json').pipe(
@@ -37,10 +48,16 @@ export class SismosService {
       );
 
       // Boostr retorna los datos dentro del campo "data"
-      const sismos = data?.data || [];
-      return sismos.map((s) => ({
+      let sismosData = data?.data;
+      if (!sismosData) {
+        sismosData = [];
+      } else if (!Array.isArray(sismosData)) {
+        sismosData = [sismosData];
+      }
+
+      return sismosData.map((s) => ({
         magnitude: String(s.magnitude || s.Magnitud),
-        location: String(s.location || s.RefGeografica),
+        location: String(s.place || s.location || s.RefGeografica),
         date: String(s.date || s.Fecha),
       }));
     } catch {
