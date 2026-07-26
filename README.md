@@ -53,6 +53,20 @@ Este proyecto utiliza variables de entorno para funcionar correctamente sin expo
 - `PORT`: (Opcional) Puerto donde correrá el servidor. Por defecto es `3000`.
 - `MERCADO_PUBLICO_TICKET`: (Opcional) Tu ticket o API Key oficial para consumir datos de Mercado Público. Si **no** defines esta variable, el sistema arrojará un _Warning_ en la consola indicando que se usarán **datos simulados (mocks)** para fines de demostración.
 
+## Flujo de Trabajo y CI/CD (GitHub Actions)
+
+El proyecto utiliza **Git Flow** simplificado:
+- **`main`**: Rama de producción. Solo recibe código testeado y revisado (vía Pull Requests).
+- **`develop`**: Rama principal de desarrollo. Todas las nuevas *features* se desprenden y se fusionan aquí.
+- **`feature/*`**: Ramas efímeras para trabajar en nuevas características.
+
+### Integración y Despliegue Continuo (CI/CD)
+
+Se ha configurado un *Pipeline* profesional utilizando **GitHub Actions** (`.github/workflows/ci-cd.yml`).
+1. **Integración (CI)**: Al hacer `push` o abrir un PR hacia `main` o `develop`, se instalan las dependencias, se pasa el Linter estricto, se ejecutan las pruebas Unitarias y E2E, y se compila el proyecto.
+2. **Despliegue (CD)**: Si todos los pasos del CI pasan en verde y se hace un `push` a la rama `main`, la aplicación inicia el proceso de despliegue continuo a producción.
+*(Nota: Modifica el archivo `.yml` con los comandos específicos de tu proveedor como AWS, Railway o Render).*
+
 ## Ejecución del Proyecto
 
 ### Desarrollo (Watch Mode)
