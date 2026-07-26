@@ -81,6 +81,24 @@ npm run build
 npm run start:prod
 ```
 
+## Dockerización (Recomendado para Producción)
+
+El proyecto incluye un entorno Docker profesional configurado con un **Dockerfile Multi-stage** para generar imágenes ligeras y seguras (sin dependencias de desarrollo y con usuario `node` no-root). 
+
+Puedes construir y levantar el contenedor fácilmente con **Docker Compose**:
+
+```bash
+# Levanta la aplicación en el puerto 3000 en segundo plano
+docker compose up -d --build
+```
+
+Si deseas detenerlo, simplemente ejecuta:
+```bash
+docker compose down
+```
+
+> **Nota**: Docker Compose leerá automáticamente tu archivo `.env` e inyectará los tickets y configuración dentro del contenedor de manera segura.
+
 ## Documentación de la API (Swagger)
 
 Una vez que el servidor esté en ejecución, puedes acceder a la interfaz interactiva de Swagger, donde encontrarás el detalle de todos los endpoints y podrás probar las peticiones directamente.

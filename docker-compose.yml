@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: destapa-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Lee las variables desde tu archivo .env local si están configuradas
+      - MERCADO_PUBLICO_TICKET=${MERCADO_PUBLICO_TICKET}
+    env_file:
+      - .env
